@@ -1,60 +1,36 @@
-/**********************************************************************************
-// PalindroWin
-//
-// CriaÁ„o:     09 Jun 2011
-// AtualizaÁ„o: 14 Jul 2021
-// Compilador:  Visual C++ 2019
-//
-// DescriÁ„o:   Exemplo de um programa completo para Windows. Exemplifica a
-//              criaÁ„o de bot„o, caixa de texto, rÛtulo, caixa de grupo e
-//              faz o tratamento da entrada do usu·rio. A aplicaÁ„o descobre
-//              se uma palavra È um palÌndromo.
-//
-**********************************************************************************/
 
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>   // inclui cabeÁalhos do windows
+#include <windows.h>
 
-//----------------------------------------------------------------------------------
 
 // Habilita estilos visuais modernos
 #pragma comment(linker, "\"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 
-//---------------------------------------------------------------------------------
-
-// DefiniÁıes 
 #define GROUPBOX_ID   100
 #define LABEL_TEXT_ID 200
 #define EDIT_TEXT_ID  300 
 #define BUTTON_ID	  400
 
-//--------------------------------------------------------------------------------
 
-// Vari·veis globais 
-bool      resultClean = true;      // tela de resultado est· limpa
-HINSTANCE hInstanceApp;             // identificador da aplicaÁ„o
-RECT      clientRect;               // dimensıes da ·rea cliente da janela
-HWND      hwndGroup;                // identificador para group box
-HWND      hwndLabel;                // identificador para label 
-HWND      hwndEdit;                 // identificador para edit control
-HWND      hwndButton;               // identificador para button
-HFONT     appFont;                  // fonte da aplicaÁ„o
+// Vari√°veis globais 
+bool      resultClean = true;      // tela de resultado est√° limpa
+HINSTANCE hInstanceApp;             // identificador da aplica√ß√£o
+RECT      clientRect;               // dimens√µes da janela
+HWND      hwndGroup;                // group box
+HWND      hwndLabel;                // label 
+HWND      hwndEdit;                 // edit control
+HWND      hwndButton;               // button
+HFONT     appFont;                  // fonte da aplica√ß√£o
 
-//--------------------------------------------------------------------------------
-
-// ProtÛtipo do procedimento da janela
+// Prot√≥tipo do procedimento da janela
 LRESULT CALLBACK WinProc(HWND, UINT, WPARAM, LPARAM);
 
-//--------------------------------------------------------------------------------
-
-// Programa principal
 int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
     HWND         hwnd;
     MSG          msg;
     WNDCLASS     wndclass;
 
-    // define uma window class name
     wndclass.style = CS_HREDRAW | CS_VREDRAW;
     wndclass.lpfnWndProc = WinProc;
     wndclass.cbClsExtra = 0;
@@ -69,33 +45,33 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     // registra a nova class name
     if (!RegisterClass(&wndclass))
     {
-        MessageBox(NULL, "Erro na criaÁ„o da janela!", "PalÌndromo", MB_ICONERROR);
+        MessageBox(NULL, "Erro na cria√ß√£o da janela!", "Pal√≠ndromo", MB_ICONERROR);
         return 0;
     }
 
-    // salvando identificador em vari·vel global
+    // salvando identificador em vari√°vel global
     hInstanceApp = hInstance;
 
-    // usado para centralizar janela na tela
+    //centralizar janela na tela
     int xWndPos = GetSystemMetrics(SM_CXSCREEN) / 2 - 200;
     int yWndPos = GetSystemMetrics(SM_CYSCREEN) / 2 - 120;
 
     // cria a janela principal
-    hwnd = CreateWindow("BasicWindow",                  // classe da janela
-        "PalÌndromo",                   // tÌtulo da janela
-        WS_OVERLAPPED | WS_SYSMENU,     // estilo da janela
-        xWndPos, yWndPos,               // posiÁ„o x, y inicial
-        400, 220,                       // largura e comprimento iniciais
-        NULL,                           // identificador do objeto pai
+    hwnd = CreateWindow("BasicWindow",                  // classe
+        "Pal√≠ndromo",                   // t√≠tulo
+        WS_OVERLAPPED | WS_SYSMENU,     // estilo
+        xWndPos, yWndPos,               // posi√ß√£o x, y inicial
+        400, 220,                       // largura e comprimento
+        NULL,                           //objeto pai
         NULL,                           // identificador do menu
-        hInstance,                      // identificador da aplicaÁ„o
-        NULL);                          // par‚metros de criaÁ„o
+        hInstance,                      // identificador da aplica√ß√£o
+        NULL);                          // par√¢metros de cria√ß√£o
 
     // mostra e atualiza a janela
     ShowWindow(hwnd, nCmdShow);
     UpdateWindow(hwnd);
 
-    // entra no laÁo principal de tratamento de eventos
+    // entra no la√ßo principal de tratamento de eventos
     while (GetMessage(&msg, NULL, 0, 0))
     {
         // traduz as mensagens
@@ -105,23 +81,21 @@ int APIENTRY WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         DispatchMessage(&msg);
     }
 
-    // finaliza programa
     return int(msg.wParam);
 }
 
-//------------------------------------------------------------------------------
 
 // Gerenciador de mensagens do sistema
 LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    PAINTSTRUCT		ps;		// usado em WM_PAINT
-    HDC				hdc;	// identificador de contexto do dispositivo
+    PAINTSTRUCT		ps;		
+    HDC				hdc;	
 
     switch (msg)
     {
     case WM_CREATE:
 
-        // pega as dimensıes da janela para o posicionamento de objetos
+        // pega as dimens√µes da janela para o posicionamento de objetos
         GetClientRect(hwnd, &clientRect);
 
         // Cria fonte MS Sans Serif
@@ -129,19 +103,18 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
             CLEARTYPE_QUALITY, VARIABLE_PITCH | FF_SWISS, "MS Sans Serif");
 
-        // Groupbox
         hwndGroup = CreateWindow(
             "BUTTON",                                   // classe
-            "Resultado",                                // tÌtulo
+            "Resultado",                                // t√≠tulo
             WS_CHILD | WS_VISIBLE | BS_GROUPBOX,        // estilo do objeto
-            clientRect.left + 10,                         // posiÁ„o x inicial
-            clientRect.top + 10,                          // posiÁ„o y inicial
+            clientRect.left + 10,                         // posi√ß√£o x inicial
+            clientRect.top + 10,                          // posi√ß√£o y inicial
             clientRect.right - 20,                        // largura inicial
             100,                                        // comprimento inicial
             hwnd,                                       // identificador do pai 
             HMENU(GROUPBOX_ID),                        // identificador do objeto
-            hInstanceApp,                               // identificador da aplicaÁ„o
-            NULL);                                      // par‚metros extras
+            hInstanceApp,                               // identificador da aplica√ß√£o
+            NULL);                                      // par√¢metros extras
 
         // Configura a fonte usada no Groupbox
         SendMessage(hwndGroup, WM_SETFONT, (WPARAM)appFont, TRUE);
@@ -150,14 +123,14 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         hwndLabel = CreateWindowEx(
             NULL,                                       // estilos extras
             "STATIC",                                   // classe
-            "Palavra:",                                 // tÌtulo
+            "Palavra:",                                 // t√≠tulo
             WS_CHILD | WS_VISIBLE,                      // estilo do objeto
-            40, 140,                                     // posiÁ„o x, y inicial
+            40, 140,                                     // posi√ß√£o x, y inicial
             140, 24,                                     // largura e comprimento inicial
             hwnd,                                       // identificador do pai
             HMENU(LABEL_TEXT_ID),                      // identificador do objeto
-            hInstanceApp,                               // identificador da aplicaÁ„o
-            NULL);                                      // par‚metros extras
+            hInstanceApp,                               // identificador da aplica√ß√£o
+            NULL);                                      // par√¢metros extras
 
         // Configura a fonte usada no Label
         SendMessage(hwndLabel, WM_SETFONT, (WPARAM)appFont, TRUE);
@@ -166,14 +139,14 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         hwndEdit = CreateWindowEx(
             WS_EX_CLIENTEDGE,                           // estilos extras
             "EDIT",                                     // classe
-            "",                                         // tÌtulo
+            "",                                         // t√≠tulo
             WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,     // estilo do objeto
-            100, 138,                                    // posiÁ„o x, y inicial
+            100, 138,                                    // posi√ß√£o x, y inicial
             130, 20,                                     // largura e comprimento inicial
             hwnd,                                       // manipulador pai
             HMENU(EDIT_TEXT_ID),                       // identificador do objeto
-            hInstanceApp,                               // identificador da aplicaÁ„o
-            NULL);                                      // par‚metros extras
+            hInstanceApp,                               // identificador da aplica√ß√£o
+            NULL);                                      // par√¢metros extras
 
         // Configura a fonte usada na Edit box
         SendMessage(hwndEdit, WM_SETFONT, (WPARAM)appFont, TRUE);
@@ -181,14 +154,14 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         // Button
         hwndButton = CreateWindow(
             "BUTTON",                                   // classe
-            "Verificar",                                // tÌtulo
+            "Verificar",                                // t√≠tulo
             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,      // estilo do objeto
-            255, 135,                                    // posiÁ„o x, y inicial
+            255, 135,                                    // posi√ß√£o x, y inicial
             100, 24,                                     // largura e comprimento inicial
             hwnd,                                       // manipulador pai
             HMENU(BUTTON_ID),                          // identificador do objeto
-            hInstanceApp,                               // identificador da aplicaÁ„o
-            NULL);                                      // par‚metros extra		
+            hInstanceApp,                               // identificador da aplica√ß√£o
+            NULL);                                      // par√¢metros extra		
 
         SendMessage(hwndButton, WM_SETFONT, (WPARAM)appFont, TRUE);
 
@@ -199,7 +172,7 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         // se a caixa de texto foi modificada
         if (HIWORD(wParam) == EN_CHANGE)
         {
-            // limpa a ·rea de impress„o do resultado (se ela estiver suja)
+            
             if (!resultClean)
             {
                 // apaga resultado anterior
@@ -210,21 +183,21 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-        // filtra pressionamento de botıes
+        // filtra pressionamento de bot√µes
         switch (LOWORD(wParam))
         {
 
-            // caso bot„o com identificador BUTTON_ID tenha sido pressionado
+            // caso bot√£o com identificador BUTTON_ID tenha sido pressionado
         case BUTTON_ID:
 
-            // pega comprimento do texto armazenado na caixa de ediÁ„o
+            // pega comprimento do texto armazenado na caixa de edi√ß√£o
             int strLen = GetWindowTextLength(hwndEdit);
             char* palavra = new char[strLen + 1];
 
-            // pega texto da caixa de ediÁ„o
+            // pega texto da caixa de edi√ß√£o
             GetWindowText(hwndEdit, palavra, strLen + 1);
 
-            // verifica se a palavra È palÌndromo
+            // verifica se a palavra √© pal√≠ndromo
             int i = 0;
             int j = strLen - 1;
             while (i < j && palavra[i] == palavra[j])
@@ -248,7 +221,7 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             // fundo do texto tranparente
             SetBkMode(hdc, TRANSPARENT);
 
-            // define regi„o de exibiÁ„o do resultado 
+            // define regi√£o de exibi√ß√£o do resultado 
             RECT strRect = { clientRect.left + 20, clientRect.top + 40, clientRect.right - 20, clientRect.top + 90 };
 
             // mostra resultado
@@ -257,9 +230,9 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             else
             {
                 if (i >= j)
-                    DrawText(hdc, "A palavra È um palÌndromo", -1, &strRect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+                    DrawText(hdc, "A palavra √© um pal√≠ndromo", -1, &strRect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
                 else
-                    DrawText(hdc, "N„o È um palÌndromo", -1, &strRect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+                    DrawText(hdc, "N√£o √© um pal√≠ndromo", -1, &strRect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
             }
 
 
@@ -281,17 +254,17 @@ LRESULT CALLBACK WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_SETFOCUS:
-        // a caixa de texto recebe o foco no inicio da aplicaÁ„o
+        // a caixa de texto recebe o foco no inicio da aplica√ß√£o
         SetFocus(hwndEdit);
         return 0;
 
     case WM_DESTROY:
-        // sai da aplicaÁ„o 
+        // sai da aplica√ß√£o 
         PostQuitMessage(0);
         break;
 
     default:
-        // processa qualquer mensagem n„o tratada pelos casos anteriores
+        // processa qualquer mensagem n√£o tratada pelos casos anteriores
         return (DefWindowProc(hwnd, msg, wParam, lParam));
     }
 
